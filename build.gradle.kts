@@ -8,7 +8,7 @@ plugins {
 kotlin {
     androidLibrary {
         namespace = "de.malteans.datastore"
-        compileSdk = 36
+        compileSdk = 37
         minSdk = 30
     }
 
