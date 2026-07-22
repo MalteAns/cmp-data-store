@@ -1,12 +1,12 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.android.kotlin.multiplatform.library)
-    alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.androidMultiplatformLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "de.malteans.datastore"
         compileSdk = 37
         minSdk = 30
@@ -25,8 +25,7 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
-
+        val desktopMain = getByName("desktopMain")
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
