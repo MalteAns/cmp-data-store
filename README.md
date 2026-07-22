@@ -76,17 +76,16 @@ class DefaultDataStoreRepository(
 ## Dependencies:
 ### VersionCatalog:
 ```toml
-agp = "8.12.3"
-kotlin = "2.2.20"
-compose-multiplatform = "1.9.2"
-androidx-activity = "1.11.0"
+agp = "9.2.1"
+kotlin = "2.4.10"
+kotlinStdlib = "2.4.10"
+composeMultiplatform = "1.11.1"
+androidx-activityCompose = "1.13.0"
 
-kotlinStdlib = "2.2.20"
-
-datastore = "1.1.7"
+datastore = "1.2.1"
 
 [libraries]
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 
@@ -94,19 +93,21 @@ datastore = { module = "androidx.datastore:datastore", version.ref = "datastore"
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 [plugins]
+# Basics
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+# KMP/CMP
+androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
-compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ```
 
 ### root build.gradle.kts
 ```kts
 plugins {
+    alias(libs.plugins.androidMultiplatformLibrary) apply false
+    alias(libs.plugins.composeMultiplatform) apply false
+    alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.android.kotlin.multiplatform.library) apply false
-    alias(libs.plugins.compose.multiplatform) apply false
-    alias(libs.plugins.compose.compiler) apply false
 }
 ```
 
@@ -115,7 +116,7 @@ plugins {
 [...]
 kotlin {
     sourceSets {
-        val desktopMain by getting
+        val desktopMain by getByName("desktopMain")
 
         androidMain.dependencies {
             implementation(projects.dataStore)
